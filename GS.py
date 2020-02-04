@@ -12,6 +12,8 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
+x = 1024
+y = 768
 #Define the target, source and output arrays. Source has to be completely white otherwise it kills everything
 def initialize(x,y):
     xarr = np.zeros(x)
@@ -50,7 +52,7 @@ def Phase(z):
         return np.angle(z)
 
 #Main GS algorithm implementation using numpy FFT package
-def GS(target,source):
+def GS(target,source,o):
     A = np.fft.ifft2(target)
     for i in range(50):
         B = Amplitude(source) * np.exp(1j * Phase(A))
@@ -58,8 +60,12 @@ def GS(target,source):
         D = Amplitude(target) * np.exp(1j * Phase(C))
         A = np.fft.ifft2(D)
     output = Phase(A)
+    for i in range(x):
+        for n in range(y):
+            if output[n][i] > o:
+                output[n][i] = o
     return output
-output = GS(target,source)
+output = GS(target,source,0)
 
 #Make array into PIL Image
 def mkPIL(array):
@@ -70,7 +76,7 @@ def mkPIL(array):
 im = mkPIL(output)
 plt.imshow(im, cmap='gray')
 
-"""
+
 fig = plt.figure(figsize=(20,15), frameon=False)
 ax = fig.add_subplot(111)
 ax.set_yticklabels([])                        
@@ -78,10 +84,11 @@ ax.set_xticklabels([])
 plt.imshow(target, cmap='gray')
 plt.show()
 
+
+
 fig = plt.figure(figsize=(20,15), frameon=False)
 ax = fig.add_subplot(111)
 ax.set_yticklabels([])                        
 ax.set_xticklabels([])
 plt.imshow(output, cmap='gray')
 plt.show()
-"""
