@@ -38,7 +38,7 @@ def trap(xtmi,xtma,xs,ytmi,ytma,ys,array):
                 if ytmi < n < ytma:
                     array[n][i] = 255
     return
-trap(200,205,1024,500,505,768,target)
+trap(510,515,1024,382,387,768,target)
 
 #Returns the amplitude of a complex number
 def Amplitude(x):
