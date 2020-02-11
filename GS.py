@@ -12,8 +12,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
-x = 1024
-y = 768
+
 #Define the target, source and output arrays. Source has to be completely white otherwise it kills everything
 def initialize(x,y):
     xarr = np.zeros(x)
@@ -28,7 +27,7 @@ def initialize(x,y):
         for n in range(y):
             source[n][i] = 1
     return target, source, output
-target,source,output=initialize(1024,768)
+
 
 # creates trap between XTrapMin-XTrapMax and YTrapMin-YTrapMax
 def trap(xtmi,xtma,xs,ytmi,ytma,ys,array):
@@ -38,7 +37,7 @@ def trap(xtmi,xtma,xs,ytmi,ytma,ys,array):
                 if ytmi < n < ytma:
                     array[n][i] = 255
     return
-trap(510,515,1024,382,387,768,target)
+
 
 #Returns the amplitude of a complex number
 def Amplitude(x):
@@ -65,7 +64,7 @@ def GS(target,source,o):
             if output[n][i] > o:
                 output[n][i] = o
     return output
-output = GS(target,source,0)
+
 
 #Make array into PIL Image
 def mkPIL(array):
@@ -73,8 +72,14 @@ def mkPIL(array):
     return im
 
 
-im = mkPIL(output)
-plt.imshow(im, cmap='gray')
+x = 1024
+y = 768
+target,source,output=initialize(1024,768)
+trap(517,527,1024,380,388,768,target)
+output = GS(target,source,0)
+
+#im = mkPIL(output)
+#plt.imshow(im, cmap='gray')
 
 
 fig = plt.figure(figsize=(20,15), frameon=False)
