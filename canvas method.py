@@ -1,9 +1,13 @@
 import numpy as np
-import cv2
-from PIL import Image, ImageTk
+from PIL import Image
 import matplotlib.pyplot as plt
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+
+""" 
+See if can draw new window on exteral screen
+"""
 
 #Define the target, source and output arrays. Source has to be completely white otherwise it kills everything
 def initialize(x,y):
@@ -45,7 +49,7 @@ def Phase(z):
 #such that its Fourier transform would have the amplitude distribution of the plane, Target.
 def GS(target,source):
     A = np.fft.ifft2(target)
-    for i in range(50):
+    for i in range(5):
         B = Amplitude(source) * np.exp(1j * Phase(A))
         C = np.fft.fft2(B)
         D = Amplitude(target) * np.exp(1j * Phase(C))
@@ -61,15 +65,15 @@ def mkPIL(array):
 def up():
     global ytmi
     global ytma
-    ytmi += 10
-    ytma += 10
+    ytmi -= 10
+    ytma -= 10
     return 
 
 def down():
     global ytmi
     global ytma
-    ytmi -= 10
-    ytma -= 10
+    ytmi += 10
+    ytma += 10
     return
 
 def right():
@@ -86,15 +90,16 @@ def left():
     xtma -= 10
     return
   
-xtmi = 510
-xtma = 515
+xtmi = 127
+xtma = 129
 xs = 1024
-ytmi = 382
-ytma = 387
+ytmi = 0
+ytma = 5
 ys = 768
 
 
 root = tk.Tk()
+root.attributes('-fullscreen', True)
 def main():
     app = Lower(root)
     root.mainloop()
@@ -103,21 +108,20 @@ class Lower:
     def __init__(self, master):
         self.master = master
         self.frame = tk.Frame(self.master).pack()
-        self.canvas = tk.Canvas(self.master, highlightthickness=0, borderwidth=0)
-        self.canvas.pack()
-        self.button1 = tk.Button(self.frame, text = 'Create window', width = 25, command = self.new_window)
-        self.button1.pack()
         self.displayimg = tk.Button(self.frame, text = 'Display', width = 25, command = self.plot)
         self.displayimg.pack()
         self.makewidg()
     def makewidg(self):
-        fig = plt.figure(figsize=(20,15), frameon=False)
+        fig = plt.figure(figsize=(100,100), frameon=False)  #changing figsize doesnt cange the size of the plot display
+        fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
         self.ax = fig.add_subplot(111)
         self.ax.set_yticklabels([])                        
         self.ax.set_xticklabels([])
         self.canvas = FigureCanvasTkAgg(fig, master=self.master)
-        self.canvas.get_tk_widget().pack()
+        self.canvas.get_tk_widget().pack(expand=True)
+        # self.canvas.figure.tight_layout()
         self.canvas.draw()
+        self.new_window()
     def new_window(self):
         self.newWindow = tk.Toplevel()
         self.app = Display(self.newWindow)
@@ -127,6 +131,8 @@ class Lower:
         trap(xtmi,xtma,xs,ytmi,ytma,ys,target)
         output = GS(target,source)
         self.ax.imshow(output, cmap='gray')
+        self.ax.set_yticklabels([])                        
+        self.ax.set_xticklabels([])
         self.canvas.draw()
         self.ax.clear()
         
@@ -149,8 +155,6 @@ class Display:
         self.left.pack()
         self.kill = tk.Button(self.frame, text = 'Kill', width = 25, command = self.kill)
         self.kill.pack()
-        
     def kill(self): 
         root.destroy()
- 
 main()
