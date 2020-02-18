@@ -7,6 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 """ 
 See if can draw new window on exteral screen
+https://stackoverflow.com/questions/26286660/how-to-make-a-window-fullscreen-in-a-secondary-display-with-tkinter
 """
 
 #Define the target, source and output arrays. Source has to be completely white otherwise it kills everything
@@ -90,8 +91,8 @@ def left():
     xtma -= 10
     return
   
-xtmi = 127
-xtma = 129
+xtmi = 125
+xtma = 130
 xs = 1024
 ytmi = 0
 ytma = 5
@@ -111,15 +112,17 @@ class Lower:
         self.displayimg = tk.Button(self.frame, text = 'Display', width = 25, command = self.plot)
         self.displayimg.pack()
         self.makewidg()
+        print(root.winfo_screenwidth(),root.winfo_screenheight())
     def makewidg(self):
-        fig = plt.figure(figsize=(100,100), frameon=False)  #changing figsize doesnt cange the size of the plot display
-        fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-        self.ax = fig.add_subplot(111)
+        self.fig = plt.figure(figsize=(100,100), frameon=False)  #changing figsize doesnt cange the size of the plot display
+        self.fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+        self.fig.tight_layout()
+        self.ax = self.fig.add_subplot(111)
         self.ax.set_yticklabels([])                        
         self.ax.set_xticklabels([])
-        self.canvas = FigureCanvasTkAgg(fig, master=self.master)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
         self.canvas.get_tk_widget().pack(expand=True)
-        # self.canvas.figure.tight_layout()
+        self.canvas.figure.tight_layout()
         self.canvas.draw()
         self.new_window()
     def new_window(self):
