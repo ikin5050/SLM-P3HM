@@ -1,5 +1,6 @@
 # SLM-P3HM
-Code for P3HM Holography SLM lab
+
+Depends on a few libraries, numpy Tkinter Pillow and matplotlib
 
 
 GS.py contains my implementation of the Gerchberg-Saxton algorithm.
