@@ -16,3 +16,8 @@ Then you can move the secondary Manipulation window to your second screen and di
 I have set each of the buttons to move the trap 10 pixels in the direction. This is purely because the setup I used was minimalistic
 and larger changes needed to be made to see them without proper detectors. You can change how much the trap is moved by editing the
 values in the Up/right/left/down functions from 10 to your desired positive integer.
+
+I am aware that the Gerchberg-Saxton algorithm is rather inefficient for calculating diffraction patterns for a single trap, but the plans for future releases are:
+* Multiple trap creation
+* Entry boxes to enter coordinates and create new trap
+* Removing display button and integrating it into the up/down/left/right buttons
