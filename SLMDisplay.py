@@ -55,15 +55,14 @@ def Phase(z):
 def GS(target,source, o=0):
     A = np.fft.ifft2(target)
     for i in range(5):
-        B = Amplitude(source) * np.exp(1j * Phase(A))
+        B = Amplitude(source) * np.exp(1j * Phase( A))
         C = np.fft.fft2(B)
         D = Amplitude(target) * np.exp(1j * Phase(C))
         A = np.fft.ifft2(D)
     output = Phase(A)
-    for i in range(xs):
-        for n in range(ys):
-            if output[n][i] > (np.amax(output) - o*np.amax(output)):
-                output[n][i] = np.amax(output) - o*np.amax(output)
+    fraction = np.amax(output) - o*np.amax(output)
+    index = np.argwhere(output > fraction)
+    output[index] = fraction
     return output
 
 #Make array into PIL Image
