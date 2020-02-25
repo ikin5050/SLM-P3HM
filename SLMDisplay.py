@@ -52,7 +52,7 @@ def Phase(z):
 #Main GS algorithm implementation using numpy FFT package
 #performs the GS algorithm to obtain a phase distribution for the plane, Source
 #such that its Fourier transform would have the amplitude distribution of the plane, Target.
-def GS(target,source):
+def GS(target,source, o=0):
     A = np.fft.ifft2(target)
     for i in range(5):
         B = Amplitude(source) * np.exp(1j * Phase(A))
@@ -60,6 +60,10 @@ def GS(target,source):
         D = Amplitude(target) * np.exp(1j * Phase(C))
         A = np.fft.ifft2(D)
     output = Phase(A)
+    for i in range(xs):
+        for n in range(ys):
+            if output[n][i] > (np.amax(output) - o*np.amax(output)):
+                output[n][i] = np.amax(output) - o*np.amax(output)
     return output
 
 #Make array into PIL Image
